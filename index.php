@@ -10,6 +10,36 @@
 			textarea {
 				width:100%;
 				height:400px;
+				margin: 20px;
+			}
+			
+			body , textarea{
+				font-family: "Roboto", sans-serif;
+			}
+			
+			body {
+				background: rgb(180, 180, 240);
+			}
+			
+			button{
+				background: rgb(200,200,256);
+				border: 0px;
+				font-size: 20px;
+				margin: 20px;
+				padding: 5px;
+				transition: background 0.3s;
+			}
+			button:hover {
+				background: rgb(220,220,256);
+			}
+			button:active{
+				background: white;
+			}
+			.speaker_name {
+				width: 30px;
+			}
+			.time_input {
+				width: 30px;
 			}
 		</style>
 	</head>
@@ -19,92 +49,22 @@
 		<audio id="sound" controls></audio>
 		Uppspelningshastighet: 
 		<input type="range" id="speed_range" value="1" min = "0.5" max="1.5" step="0.1" onchange="speed_change(this)">
-		<textarea id="the_text" cols="40" rows="5"></textarea>
-		<button onclick="insertTime()">Lägg in aktuell tid</button>
-		
-		<script>
-			function speed_change(obj) {
-				audioElement = document.getElementById("sound");
-				audioElement.playbackRate = obj.value;
-				console.log("changing rate to " + obj.value);
-			}
-			
-			function playFile(obj) {
-				var sound = document.getElementById('sound');
-				var reader = new FileReader();
-				reader.onload = (function(audio) {
-					return function(e) {
-						audio.src = e.target.result;
-				};})(sound);
-				reader.addEventListener('load', function() {
-					document.getElementById("sound").play()
-				});
-				reader.readAsDataURL(obj.files[0]);
-			}
-			
-			function insertText(text) {
-				$textarea = $('#the_text');
-				var cursorPos = $textarea.prop('selectionStart');
-				var v = $textarea.val();
-				var textBefore = v.substring(0,  cursorPos);
-				var textAfter  = v.substring(cursorPos, v.length);
 
-				$textarea.val(textBefore + text + textAfter);
-				$textarea.prop('selectionStart', cursorPos + text.length);
-			}
-			
-			function insertTime() {
-				audioElement = document.getElementById("sound");
-				
-				insertText(Math.floor(audioElement.currentTime / 60) + ":" + Math.floor(audioElement.currentTime) + "\n");
-				$("#the_text").focus();
-			}
-			
-			$("#the_text").keypress(function(event){
-				if (event.ctrlKey) {
-					console.log(event.key);
-					if (event.key == "t") { //Funkar inte
-						insertText("hej");
-						
-    					event.preventDefault(); 
-						return false;
-					}
-					else if(event.key == "b") {
-						audioElement = document.getElementById("sound");
-						audioElement.currentTime -= 1;
-				
-    					event.preventDefault(); 
-						return false;
-					}
-				}
-				if (event.shiftKey) {
-					if(event.key == " ") {
-						audioElement = document.getElementById("sound");
-				
-						if (audioElement.paused) {
-							audioElement.play()
-							is_playing = true;
-						}
-						else {
-							audioElement.pause()
-							is_playing = false;
-						}
-						
-    					event.preventDefault(); 
-						return false;
-					}
-				}
-			});
-			
-			$("#the_text").change(function(object) {
-				localStorage.transcribed_text = $("#the_text").val();
-			});
-			
-			$(window).on("load", function() {
-				if (typeof localStorage.transcribed_text !== "undefined") {
-					$("#the_text").val(localStorage.transcribed_text);
-				}
-			});
+		<button title="skip backward" onclick="skipBackward(15)">◀◀◀</button>
+		<button title="skip backward" onclick="skipBackward(5)">◀◀</button>
+		<button id="toggle_play" title="play/pause" onclick="togglePlay()">▶</button>
+		<button title="skip forward" onclick="skipForward(5)">▶▶</button>
+		<button title="skip forward" onclick="skipForward(15)">▶▶▶</button>
+
+		<div class="text_wrapper">
+			<textarea id="the_text" cols="40" rows="5"></textarea>
+		</div>
+		<button onclick="insertTime()">Lägg in aktuell tid</button>
+		<span>Talare 1</span><input class="speaker_name" id="speaker_name1" value="J"></input>
+		<span>Talare 2</span><input class="speaker_name" id="speaker_name2" value="H"></input>
+		<span>Backa vid uppspelning</span><input class="speaker_name" id="repeat_time" value="1"></input>s
+		
+		<script src="main.js">
 		</script>
 	</body>
 </html>
