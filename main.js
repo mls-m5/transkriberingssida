@@ -1,16 +1,21 @@
 
-var playsign = "▶";
-var pausesign = "⏸";
-var audioElement = getById("audio");
-var audioSlider = getById("audio_position");
-
 function getById(id) {
 	return document.getElementById(id);
 }
 
+var playsign = "▶";
+var pausesign = "⏸";
+var audioFileElement = getById("audio_file");
+var audioElement = getById("sound");
+var timeDisplay = $("#time_display");
+var timeContainer = $("#time_container");
+
+
 function speed_change(obj) {
 	audioElement = document.getElementById("sound");
 	audioElement.playbackRate = obj.value;
+	var label = getById("speed_label");
+	label.innerHTML = Math.round(obj.value * 10) / 10;
 	console.log("changing rate to " + obj.value);
 }
 
@@ -29,6 +34,7 @@ function playFile(obj) {
 		document.getElementById("sound").play()
 	});
 	reader.readAsDataURL(obj.files[0]);
+	audioElement = getById("sound");
 }
 
 function insertText(text) {
@@ -45,7 +51,7 @@ function insertText(text) {
 function insertTime() {
 	audioElement = document.getElementById("sound");
 	
-	insertText(Math.floor(audioElement.currentTime / 60) + ":" + Math.floor(audioElement.currentTime) + "\n");
+	insertText(Math.floor(audioElement.currentTime / 60) + ":" + Math.floor(audioElement.currentTime) % 60 + "\n");
 	$("#the_text").focus();
 }
 
@@ -71,6 +77,7 @@ function switchSpeaker() {
 }
 
 function togglePlay() {
+	saveText();
 	audioElement = document.getElementById("sound");
 	if (audioElement.paused) {
 		audioElement.currentTime -= Number($("#repeat_time").val());
@@ -102,14 +109,23 @@ function skipBackward(time) {
 }
 
 audioElement.ontimeupdate = function() {
-	audioSlider.value = audioElement.currentTime;
+	timeDisplay.width(timeContainer.width() * audioElement.currentTime / audioElement.duration);
 }
 
 function seekTo(time) {
 	audioElement.currentTime = time;
 }
 
+function showHelp() {
+	alert("Tryck shift+space i textvyn för att spela/pausa, tryck på knappen under textvyn (eller snabbare tab, space) för att lägga in aktuell tid som en anteckning i dokumentet. Shift + Enter skriver in namn på aktuell talare, och växlar mellan talare");
+}
+
 $("#the_text").keypress(function(event){
+	if (event.keyCode = 27) {
+		togglePlay();
+		event.preventDefault();
+		return false;
+	}
 	if (event.ctrlKey) {
 		console.log(event.key);
 		if (event.key == "t") { //Funkar inte
@@ -159,8 +175,19 @@ $("#the_text").keypress(function(event){
 	}
 });
 
-$("#the_text").change(function(object) {
+$("#time_container").click(function(e) {
+	var tc = timeContainer;
+	var width = tc.width();
+
+	audioElement.currentTime = audioElement.duration * e.pageX / width;
+});
+
+function saveText() {
 	localStorage.transcribed_text = $("#the_text").val();
+}
+
+$("#the_text").change(function(object) {
+	saveText();
 });
 
 $(window).on("load", function() {
