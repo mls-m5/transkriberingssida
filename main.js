@@ -222,7 +222,7 @@ $(window).on("load", function() {
 	}
 });
 
-var the_text = container.querySelector('textarea');
+var the_text = container.querySelector('the_text');
 if (the_text.addEventListener) {
   the_text.addEventListener('input', function() {
     // event handling code for sane browsers
