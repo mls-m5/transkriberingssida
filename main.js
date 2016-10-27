@@ -143,7 +143,7 @@ function seekTo(time) {
 }
 
 function showHelp() {
-	alert("Tryck shift+space i textvyn för att spela/pausa, tryck på knappen under textvyn (eller snabbare tab, space) för att lägga in aktuell tid som en anteckning i dokumentet. Shift + Enter skriver in namn på aktuell talare, och växlar mellan talare");
+	alert("Tryck shift+space i textvyn för att spela/pausa, tryck på klockan för att lägga in aktuell tid som en anteckning i dokumentet. Shift + Enter skriver in namn på aktuell talare, och växlar mellan talare");
 }
 
 function textAreaAdjust(o) {
