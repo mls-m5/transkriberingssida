@@ -20,12 +20,11 @@
 
 			<input type="range" id="speed_range" value="1" min = "0.5" max="1.5" step="0.1" onchange="speed_change(this)">
 			<span id="speed_label">1x</span>
-			<button onclick="insertTime()" title="Insert current time">✎⌚</button>
 			<span>☻</span><input class="speaker_name" id="speaker_name1" title="name of speaker 1 (insert with shift+return)" value="M"></input>
 			<span>☻</span><input class="speaker_name" id="speaker_name2" title="name of speaker 2 (insert with shift+return)" value="I"></input>
 			<span>↶</span><input class="speaker_name" id="repeat_time" value="1"></input>s
-			<button onclick="showHelp()">?
-			</button>
+			<button onclick="insertTime()" id="insert_time_button" title="Insert current time">✎⌚00:00</button>
+			<button onclick="showHelp()">?</button>
 			
 		</div>
 

@@ -5,6 +5,8 @@ function getById(id) {
 
 var playsign = "▶";
 var pausesign = "⏸";
+var clocksign = "⌚";
+var pensign = "✎";
 var audioFileElement = getById("audio_file");
 var audioElement = getById("sound");
 var timeDisplay = $("#time_display");
@@ -123,6 +125,17 @@ function skipBackward(time) {
 
 audioElement.ontimeupdate = function() {
 	timeDisplay.width(timeContainer.width() * audioElement.currentTime / audioElement.duration);
+	var button = getById("insert_time_button");
+	var seconds = Math.floor(audioElement.currentTime);
+	var minutes = Math.floor(seconds / 60);
+	if (minutes < 10) {
+		minutes = "0" + minutes;
+	}
+	seconds = seconds % 60;
+		if (seconds < 10) {
+		seconds = "0" + seconds;
+	}
+	button.innerHTML = pensign + clocksign + minutes + ":" + seconds;
 }
 
 function seekTo(time) {
@@ -209,4 +222,16 @@ $(window).on("load", function() {
 	}
 });
 
+var the_text = container.querySelector('textarea');
+if (the_text.addEventListener) {
+  the_text.addEventListener('input', function() {
+    // event handling code for sane browsers
+    saveText();
+  }, false);
+} else if (the_text.attachEvent) {
+  the_text.attachEvent('onpropertychange', function() {
+    // IE-specific event handling code
+    saveText();
+  });
+}
 
