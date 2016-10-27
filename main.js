@@ -63,16 +63,29 @@ function insertSpeaker(number) {
 
 	the_text = getById("the_text");
 	the_text.selectionEnd = the_text.selectionStart;
+}
 
+function formatSpeaker(number, bold) {
+	speakerInput = getById("speaker_name" + number);
+	if (bold) {
+		speakerInput.style.fontWeight = "bold";
+	}
+	else {
+		speakerInput.style.fontWeight = "";
+	}
 }
 
 //Insert the name of the other speaker
 function switchSpeaker() {
 	if (lastSpeaker == 1) {
 		insertSpeaker(2);
+		formatSpeaker(2, true);
+		formatSpeaker(1, false);
 	}
 	else {
 		insertSpeaker(1);
+		formatSpeaker(1, true);
+		formatSpeaker(2, false);
 	}
 }
 
@@ -120,12 +133,12 @@ function showHelp() {
 	alert("Tryck shift+space i textvyn för att spela/pausa, tryck på knappen under textvyn (eller snabbare tab, space) för att lägga in aktuell tid som en anteckning i dokumentet. Shift + Enter skriver in namn på aktuell talare, och växlar mellan talare");
 }
 
+function textAreaAdjust(o) {
+  // o.style.height = "1px";
+  // o.style.height = (25+o.scrollHeight)+"px";
+}
+
 $("#the_text").keypress(function(event){
-	if (event.keyCode = 27) {
-		togglePlay();
-		event.preventDefault();
-		return false;
-	}
 	if (event.ctrlKey) {
 		console.log(event.key);
 		if (event.key == "t") { //Funkar inte
